@@ -1,8 +1,8 @@
 ﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -10,8 +10,8 @@ namespace ImageFunctions
 {
     public class ServiceBusTopicCommunicationClient
     {
-        private readonly string serviceUri = "Endpoint=sb://academyimageservicebusnamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EbYro1SiAvTtQhMo0U5iA8WRkvxvFOui8fmxdA86AOo=";
-        private readonly string topicName = "ImageTopic";
+        private static readonly string ServiceUri = Environment.GetEnvironmentVariable("AzureServiceBus");
+        private static readonly string TopicName = Environment.GetEnvironmentVariable("AzureServiceBusTopic");
         private TopicClient sendClient;
 
         /// <summary>
@@ -40,13 +40,13 @@ namespace ImageFunctions
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(topicName))
+            if (string.IsNullOrWhiteSpace(TopicName))
             {
-                sendClient = new TopicClient(new ServiceBusConnectionStringBuilder(serviceUri));
+                sendClient = new TopicClient(new ServiceBusConnectionStringBuilder(ServiceUri));
             }
             else
             {
-                sendClient = new TopicClient(serviceUri, topicName);
+                sendClient = new TopicClient(ServiceUri, TopicName);
             }
         }
     }
