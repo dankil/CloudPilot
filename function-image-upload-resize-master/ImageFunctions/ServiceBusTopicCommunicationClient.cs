@@ -27,7 +27,10 @@ namespace ImageFunctions
                 image.Save(m, new PngEncoder());
                 byte[] imageBytes = m.ToArray();
 
-                await sendClient.SendAsync(new Message(imageBytes));
+                for (int i = 0; i < 100; i++)
+                {
+                    await sendClient.SendAsync(new Message(imageBytes));
+                }
             }
 
             await sendClient.CloseAsync();
